@@ -12,44 +12,44 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
+            background-color: #f0f0f0; /* Цвет по умолчанию */
+            transition: background-color 0.1s; /* Плавный переход (опционально) */
         }
         button {
             padding: 15px 30px;
             font-size: 18px;
             cursor: pointer;
+            position: relative;
+            z-index: 1; /* Чтобы кнопка оставалась поверх фона */
         }
-        .siren {
-            width: 100px;
-            height: 100px;
-            background-color: red;
-            animation: flash 0.5s infinite;
-            display: none; /* Скрыт по умолчанию */
-            margin-top: 20px;
-        }
+        /* Анимация для всего экрана */
         @keyframes flash {
             0% { background-color: red; }
             50% { background-color: blue; }
             100% { background-color: red; }
         }
+        /* Класс для включения анимации */
+        .siren-active {
+            animation: flash 0.5s infinite;
+        }
     </style>
 </head>
 <body>
     <button onclick="toggleSiren()">Включить/Выключить сирену</button>
-    <div class="siren" id="siren"></div>
     <audio id="sirenSound" src="siren.mp3" loop></audio>
     <script>
         let isSirenOn = false;
-        const sirenElement = document.getElementById('siren');
         const sirenSound = document.getElementById('sirenSound');
+        const body = document.body;
 
         function toggleSiren() {
             if (isSirenOn) {
-                sirenElement.style.display = 'none';
-                sirenSound.pause();
+                body.classList.remove('siren-active'); // Убираем анимацию
+                body.style.backgroundColor = '#f0f0f0'; // Возвращаем исходный цвет
+                sirenSound.pause(); // Останавливаем звук
             } else {
-                sirenElement.style.display = 'block';
-                sirenSound.play();
+                body.classList.add('siren-active'); // Включаем анимацию
+                sirenSound.play(); // Запускаем звук
             }
             isSirenOn = !isSirenOn;
         }
