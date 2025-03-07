@@ -106,6 +106,18 @@
     <audio id="clickSound" src="click.mp3"></audio>
     <audio id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
     <script>
+        // Перехват жестов масштабирования
+        document.addEventListener('gesturestart', function(event) {
+            event.preventDefault();
+        });
+        document.addEventListener('gesturechange', function(event) {
+            event.preventDefault();
+        });
+        document.addEventListener('gestureend', function(event) {
+            event.preventDefault();
+        });
+
+        // Обработка событий касания
         document.addEventListener('touchstart', function(event) {
             if (event.touches.length > 1) {
                 event.preventDefault();
@@ -120,6 +132,10 @@
 
         document.addEventListener('touchend', function(event) {
             event.preventDefault();
+            // Сброс масштаба, если зум всё же произошёл
+            if (window.visualViewport.scale !== 1) {
+                document.body.style.zoom = 1 / window.visualViewport.scale;
+            }
         }, { passive: false });
 
         document.addEventListener('dblclick', function(event) {
