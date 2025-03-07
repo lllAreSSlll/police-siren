@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ностальгия</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
@@ -103,6 +103,16 @@
     <audio id="clickSound" src="click.mp3"></audio>
     <audio id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
     <script>
+        document.addEventListener('touchstart', function(event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+
+        document.addEventListener('dblclick', function(event) {
+            event.preventDefault();
+        }, { passive: false });
+        
         const levels = [
             "Торгаш на улице",
             "Продавец на базаре",
@@ -148,6 +158,8 @@
                 checkLevelUp();
             }
         }
+
+        
 
         setInterval(autoClick, 1000);
 
