@@ -15,6 +15,8 @@
             margin: 0;
             background-color: #000;
             color: #0f0;
+            touch-action: manipulation;
+            -webkit-text-size-adjust: 100%;
         }
         .page {
             display: none;
@@ -40,6 +42,7 @@
             color: #fff;
             border: 2px solid #0f0;
             margin: 5px;
+            touch-action: manipulation;
         }
         button:hover {
             background-color: #555;
@@ -109,10 +112,20 @@
             }
         }, { passive: false });
 
+        document.addEventListener('touchmove', function(event) {
+            if (event.scale !== 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchend', function(event) {
+            event.preventDefault();
+        }, { passive: false });
+
         document.addEventListener('dblclick', function(event) {
             event.preventDefault();
         }, { passive: false });
-        
+
         const levels = [
             "Торгаш на улице",
             "Продавец на базаре",
@@ -158,8 +171,6 @@
                 checkLevelUp();
             }
         }
-
-        
 
         setInterval(autoClick, 1000);
 
