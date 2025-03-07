@@ -119,25 +119,26 @@
 
         // Обработка событий касания
         document.addEventListener('touchstart', function(event) {
-            if (event.touches.length > 1) {
+            if (event.touches.length > 1) { // Блокируем только мультитач
                 event.preventDefault();
             }
         }, { passive: false });
 
         document.addEventListener('touchmove', function(event) {
-            if (event.scale !== 1) {
+            if (event.scale !== 1) { // Блокируем масштабирование
                 event.preventDefault();
             }
         }, { passive: false });
 
-        document.addEventListener('touchend', function(event) {
-            event.preventDefault();
-            // Сброс масштаба, если зум всё же произошёл
+        // Обработчик touchend без preventDefault для кликов
+        document.addEventListener('touchend', function() {
+            // Сбрасываем масштаб, если зум всё же произошёл
             if (window.visualViewport.scale !== 1) {
                 document.body.style.zoom = 1 / window.visualViewport.scale;
             }
-        }, { passive: false });
+        }, { passive: true });
 
+        // Блокировка двойного клика
         document.addEventListener('dblclick', function(event) {
             event.preventDefault();
         }, { passive: false });
