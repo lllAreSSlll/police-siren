@@ -3,58 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Полицейская сирена</title>
+    <title>Ностальгия</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
+            font-family: 'Courier New', Courier, monospace;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f0f0f0; /* Цвет по умолчанию */
-            transition: background-color 0.1s; /* Плавный переход (опционально) */
+            background-color: #000;
+            color: #0f0;
+        }
+        .page {
+            display: none;
+            text-align: center;
+            width: 100%;
+        }
+        .active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        #score {
+            font-size: 28px;
+            margin: 20px 0;
         }
         button {
             padding: 15px 30px;
             font-size: 18px;
             cursor: pointer;
-            position: relative;
-            z-index: 1; /* Чтобы кнопка оставалась поверх фона */
+            background-color: #333;
+            color: #fff;
+            border: 2px solid #0f0;
+            margin: 5px;
         }
-        /* Анимация для всего экрана */
-        @keyframes flash {
-            0% { background-color: red; }
-            50% { background-color: blue; }
-            100% { background-color: red; }
+        button:hover {
+            background-color: #555;
         }
-        /* Класс для включения анимации */
-        .siren-active {
-            animation: flash 0.5s infinite;
+        #clickButton {
+            font-size: 24px;
+            padding: 20px 40px;
+            background-color: #f00;
         }
+        #level0 { background-color: #333; }
+        #level1 { background-color: #666; }
+        #level2 { background-color: #444; }
+        #level3 { background-color: #555; }
+        #level4 { background-color: #777; }
+        #level5 { background-color: #888; }
+        #level6 { background-color: #999; }
+        #level7 { background-color: #aaa; }
     </style>
 </head>
 <body>
-    <button onclick="toggleSiren()">Включить/Выключить сирену</button>
-    <audio id="sirenSound" src="siren.mp3" loop></audio>
+    <div id="level0" class="page active">
+        <h2>Торгаш на улице</h2>
+        <div id="score0">Ностальгия: 0</div>
+        <button onclick="clickNostalgia()">Собери ностальгию!</button>
+    </div>
+    <div id="level1" class="page">
+        <h2>Продавец на базаре</h2>
+        <div id="score1">Ностальгия: 0</div>
+        <button onclick="clickNostalgia()">Собери ностальгию!</button>
+    </div>
+    <div id="level2" class="page">
+        <h2>Владелец маленькой лавки</h2>
+        <div id="score2">Ностальгия: 0</div>
+        <button onclick="clickNostalgia()">Собери ностальгию!</button>
+    </div>
+    <div id="level3" class="page">
+        <h2>Владелец магазина</h2>
+        <div id="score3">Ностальгия: 0</div>
+        <button onclick="clickNostalgia()">Собери ностальгию!</button>
+    </div>
+    <div id="level4" class="page">
+        <h2>Владелец сети магазинов</h2>
+        <div id="score4">Ностальгия: 0</div>
+        <button onclick="clickNostalgia()">Собери ностальгию!</button>
+    </div>
+    <div id="level5" class="page">
+        <h2>Олигарх</h2>
+        <div id="score5">Ностальгия: 0</div>
+        <button onclick="clickNostalgia()">Собери ностальгию!</button>
+    </div>
+    <div id="level6" class="page">
+        <h2>Городской мэр</h2>
+        <div id="score6">Ностальгия: 0</div>
+        <button onclick="clickNostalgia()">Собери ностальгию!</button>
+    </div>
+    <div id="level7" class="page">
+        <h2>Президент</h2>
+        <div id="score7">Ностальгия: 0</div>
+        <button onclick="clickNostalgia()">Собери ностальгию!</button>
+    </div>
+    <audio id="clickSound" src="click.mp3"></audio>
+    <audio id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
     <script>
-        let isSirenOn = false;
-        const sirenSound = document.getElementById('sirenSound');
-        const body = document.body;
+        const levels = [
+            "Торгаш на улице",
+            "Продавец на базаре",
+            "Владелец маленькой лавки",
+            "Владелец магазина",
+            "Владелец сети магазинов",
+            "Олигарх",
+            "Городской мэр",
+            "Президент"
+        ];
+        let nostalgia = 0;
+        let level = 0;
+        const clickSound = document.getElementById('clickSound');
 
-        function toggleSiren() {
-            if (isSirenOn) {
-                body.classList.remove('siren-active'); // Убираем анимацию
-                body.style.backgroundColor = '#f0f0f0'; // Возвращаем исходный цвет
-                sirenSound.pause(); // Останавливаем звук
-            } else {
-                body.classList.add('siren-active'); // Включаем анимацию
-                sirenSound.play(); // Запускаем звук
-            }
-            isSirenOn = !isSirenOn;
+        function clickNostalgia() {
+            nostalgia += 1;
+            updateScore();
+            checkLevelUp();
+            clickSound.play();
         }
 
-        // Сообщаем Telegram, что приложение готово
+        function updateScore() {
+            document.getElementById(`score${level}`).textContent = `Ностальгия: ${nostalgia}`;
+        }
+
+        function checkLevelUp() {
+            if (nostalgia >= (level + 1) * 100 && level < 7) {
+                document.getElementById(`level${level}`).classList.remove('active');
+                level += 1;
+                document.getElementById(`level${level}`).classList.add('active');
+                updateScore();
+                const levelUpSound = document.getElementById('levelUpSound');
+                levelUpSound.play().catch(error => {
+                    console.error('Ошибка при воспроизведении звука уровня:', error);
+                });
+            }
+        }
+
+        function autoClick() {
+            if (level > 0) {
+                nostalgia += level;
+                updateScore();
+                checkLevelUp();
+            }
+        }
+
+        setInterval(autoClick, 1000);
+
         window.Telegram.WebApp.ready();
     </script>
 </body>
